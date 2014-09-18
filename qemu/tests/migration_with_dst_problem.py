@@ -139,11 +139,13 @@ def run(test, params, env):
 
         :param vm: Virtual machine for vm.
         """
+        nfs_service_name = params.get("nfs_service_name", "nfs-server")
+
         session = vm.wait_for_login(timeout=login_timeout)
         cmd = "echo '%s' > /etc/exports" % (share_cfg)
-        control_service(session, "nfs-server", "nfs", "stop")
+        control_service(session, nfs_service_name, "nfs", "stop")
         session.cmd(cmd)
-        control_service(session, "nfs-server", "nfs", "start")
+        control_service(session, nfs_service_name, "nfs", "start")
         session.cmd("iptables -F")
         session.close()
 
